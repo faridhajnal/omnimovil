@@ -1,0 +1,51 @@
+<ion-content padding>
+
+  <ion-slides pager>
+
+    <ion-slide>
+
+
+      <h2 class="slide-title">Bienvenido</h2>
+      <p>Para continuar, ingrese sus credenciales</p>
+
+      <ion-list>
+        <ion-item>
+          <ion-label floating>Correo</ion-label>
+          <ion-input #focusInput type="text" [(ngModel)]="mail"
+                     ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Contraseña</ion-label>
+          <ion-input type="password" [(ngModel)]="pwd" (keyup.enter)="continuar()"></ion-input>
+        </ion-item>
+      </ion-list>
+
+      <button ion-button block
+              [disabled]="mail.length < 5 || pwd.length < 5"
+      (click)="continuar()">
+      Verificar
+      </button>
+
+
+    </ion-slide>
+
+
+    <!-- Ultimo Slide -->
+    <ion-slide>
+
+      <img src="assets/img/omnipagos.png" class="slide-image"/>
+      <h2 class="slide-title">¡Bienvenido {{username}}!</h2>
+
+      <button ion-button large clear icon-right color="primary"
+              (click)="ingresar()">
+        Ingresar
+        <ion-icon name="arrow-forward"></ion-icon>
+      </button>
+
+    </ion-slide>
+    <!-- Fin del último slide -->
+
+  </ion-slides>
+
+
+</ion-content>

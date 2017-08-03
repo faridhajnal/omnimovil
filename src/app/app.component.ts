@@ -1,22 +1,43 @@
 import { Component } from '@angular/core';
-import { Platform } from 'ionic-angular';
+import { MenuController, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
+import { SettingsPage } from "../pages/settings/settings";
+import { LoginPage } from "../pages/login/login";
+import { UserProvider } from "../providers/user/user";
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage:any = HomePage;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
+  home = HomePage;
+  settings = SettingsPage;
+  rootPage:any = LoginPage;
+
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen,
+              private menuCtrl : MenuController, private userService : UserProvider) {
     platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      statusBar.styleDefault();
-      splashScreen.hide();
+      this.userService.load_storage().then(()=>{
+        if(this.userService.username){
+          this.rootPage = HomePage;
+        }
+        else{
+          this.rootPage = LoginPage;
+        }
+        statusBar.styleDefault();
+        splashScreen.hide();
+      });
     });
   }
+
+  goToPage(page: any){
+
+    this.rootPage = page;
+    this.menuCtrl.close();
+
+  }
+
 }
 
