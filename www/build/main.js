@@ -38,13 +38,15 @@ var HomePage = (function () {
     }
     HomePage.prototype.ionViewDidLoad = function () {
         var _this = this;
-        this.dataService.getTransactions()
-            .then(function (data) {
-            _this.myTransactions = data;
-            _this.transactionFilter = 'all';
-            _this.filteredTransactions = _this.myTransactions;
-        })
-            .catch(function (e) { return console.log(e); });
+        if (this.userService.business) {
+            this.dataService.getTransactions(this.userService.business)
+                .then(function (data) {
+                _this.myTransactions = data;
+                _this.transactionFilter = 'all';
+                _this.filteredTransactions = _this.myTransactions;
+            })
+                .catch(function (e) { return console.log(e); });
+        }
     };
     HomePage.prototype.showSideMenu = function () {
         this.menuCtrl.toggle();
@@ -84,7 +86,7 @@ var HomePage = (function () {
     HomePage.prototype.recargar = function (refresher) {
         var _this = this;
         console.log('Begin async operation', refresher);
-        this.dataService.getTransactions()
+        this.dataService.getTransactions(this.userService.business)
             .then(function (data) {
             _this.myTransactions = data;
             _this.transactionFilter = 'all';
@@ -263,22 +265,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 //let baseUrl = 'http://localhost:3000/api/'
 var baseUrl = 'https://omnipompis.herokuapp.com/api/';
-/*
-  Generated class for the DataProvider provider.
-
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular DI.
-*/
 var DataService = (function () {
     function DataService(http) {
         this.http = http;
     }
-    DataService.prototype.getTransactions = function () {
+    DataService.prototype.getTransactions = function (businessId) {
         var _this = this;
+        console.log('get transactions');
         return new Promise(function (resolve) {
-            _this.http.get(baseUrl + 'transaction/business/59811253d2a6b1001cb2abae')
+            _this.http.get(baseUrl + 'transaction/business/' + businessId)
                 .map(function (res) { return res.json(); })
                 .subscribe(function (data) {
+                console.log(data);
                 resolve(data);
             });
         });
@@ -620,6 +618,7 @@ var UserProvider = (function () {
         this.platform = platform;
         this.storage = storage;
         this.username = '';
+        this.business = '';
     }
     UserProvider.prototype.login = function (email, password) {
         var _this = this;
@@ -628,6 +627,7 @@ var UserProvider = (function () {
                 .map(function (res) { return res.json(); })
                 .subscribe(function (data) {
                 _this.username = email;
+                _this.business = data.business;
                 resolve(data);
             }, function (e) {
                 reject(e);
@@ -639,13 +639,17 @@ var UserProvider = (function () {
         return new Promise(function (resolve, reject) {
             if (_this.platform.is('cordova')) {
                 _this.storage.set('username', _this.username);
+                _this.storage.set('business', _this.business);
             }
             else {
                 if (_this.username) {
                     localStorage.setItem('username', _this.username);
+                    localStorage.setItem('business', _this.business);
                 }
-                else
+                else {
                     localStorage.removeItem('username');
+                    localStorage.removeItem('business');
+                }
                 resolve();
             }
         });
@@ -657,18 +661,23 @@ var UserProvider = (function () {
                 _this.storage.ready().then(function () {
                     _this.storage.get('username').then(function (username) {
                         _this.username = username;
-                        resolve();
+                        _this.storage.get('business').then(function (businessId) {
+                            _this.business = businessId;
+                            resolve();
+                        });
                     });
                 });
             }
             else {
                 _this.username = localStorage.getItem('username');
+                _this.business = localStorage.getItem('business');
                 resolve();
             }
         });
     };
     UserProvider.prototype.delete_user = function () {
         this.username = null;
+        this.business = null;
         this.save_storage();
     };
     return UserProvider;

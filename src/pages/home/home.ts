@@ -3,7 +3,7 @@ import { MenuController, ModalController, NavController, Refresher } from 'ionic
 import { DataService } from "../../providers/data/data";
 import { TransactionDetailPage } from "../transaction-detail/transaction-detail";
 import { LoginPage } from "../login/login";
-import {UserProvider} from "../../providers/user/user";
+import { UserProvider } from "../../providers/user/user";
 
 export interface Transaction {
   _id: string;
@@ -38,13 +38,18 @@ export class HomePage implements OnInit{
   }
 
   ionViewDidLoad(){
-      this.dataService.getTransactions()
-        .then((data : Array<Transaction>)=>{
-        this.myTransactions = data;
-        this.transactionFilter = 'all';
-        this.filteredTransactions = this.myTransactions;
-        })
-        .catch(e=> console.log(e));
+
+      if(this.userService.business) {
+        this.dataService.getTransactions(this.userService.business)
+          .then((data : Array<Transaction>)=>{
+            this.myTransactions = data;
+            this.transactionFilter = 'all';
+            this.filteredTransactions = this.myTransactions;
+          })
+          .catch(e=> console.log(e));
+      }
+
+
   }
 
   showSideMenu(){
@@ -88,7 +93,7 @@ export class HomePage implements OnInit{
 
   recargar(refresher:Refresher){
     console.log('Begin async operation', refresher);
-    this.dataService.getTransactions()
+    this.dataService.getTransactions(this.userService.business)
       .then((data : Array<Transaction>)=>{
         this.myTransactions = data;
         this.transactionFilter = 'all';

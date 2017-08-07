@@ -10,7 +10,7 @@ let baseUrl = 'https://omnipompis.herokuapp.com/api/'
 export class UserProvider {
 
   username : string = '';
-
+  business : string = '';
   constructor(public http: Http, private platform : Platform, private storage : Storage) {}
 
   login(email : string, password : string){
@@ -21,6 +21,7 @@ export class UserProvider {
         .map(res => res.json())
         .subscribe(data => {
           this.username = email;
+          this.business = data.business;
           resolve(data);
         }, e => {
           reject(e);
@@ -32,13 +33,18 @@ export class UserProvider {
     return new Promise((resolve, reject)=>{
       if(this.platform.is('cordova')){
         this.storage.set('username', this.username);
+        this.storage.set('business', this.business);
       }
 
       else{
         if(this.username) {
           localStorage.setItem('username', this.username);
+          localStorage.setItem('business', this.business);
         }
-        else localStorage.removeItem('username');
+        else {
+          localStorage.removeItem('username');
+          localStorage.removeItem('business');
+        }
         resolve();
       }
 
@@ -51,12 +57,16 @@ export class UserProvider {
         this.storage.ready().then(()=>{
           this.storage.get('username').then((username)=>{
             this.username = username;
-            resolve();
+            this.storage.get('business').then((businessId)=>{
+              this.business = businessId;
+              resolve();
+            })
           });
         });
       }
       else{
         this.username = localStorage.getItem('username');
+        this.business = localStorage.getItem('business');
         resolve();
       }
     })
@@ -64,6 +74,7 @@ export class UserProvider {
 
   delete_user(){
     this.username = null;
+    this.business = null;
     this.save_storage();
   }
 
