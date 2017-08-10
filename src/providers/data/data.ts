@@ -3,8 +3,8 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Observable } from "rxjs/Observable";
 
-//let baseUrl = 'http://localhost:3000/api/'
-let baseUrl = 'https://omnipompis.herokuapp.com/api/'
+let baseUrl = 'http://localhost:3000/api/'
+//let baseUrl = 'https://omnipompis.herokuapp.com/api/'
 @Injectable()
 export class DataService {
 

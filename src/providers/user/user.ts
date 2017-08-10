@@ -3,8 +3,8 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Storage } from '@ionic/storage';
 import { Platform } from "ionic-angular";
-//let baseUrl = 'http://localhost:3000/api/'
-let baseUrl = 'https://omnipompis.herokuapp.com/api/'
+let baseUrl = 'http://localhost:3000/api/'
+//let baseUrl = 'https://omnipompis.herokuapp.com/api/'
 
 @Injectable()
 export class UserProvider {

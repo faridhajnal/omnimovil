@@ -263,8 +263,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-//let baseUrl = 'http://localhost:3000/api/'
-var baseUrl = 'https://omnipompis.herokuapp.com/api/';
+var baseUrl = 'http://localhost:3000/api/';
+//let baseUrl = 'https://omnipompis.herokuapp.com/api/'
 var DataService = (function () {
     function DataService(http) {
         this.http = http;
@@ -610,8 +610,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-//let baseUrl = 'http://localhost:3000/api/'
-var baseUrl = 'https://omnipompis.herokuapp.com/api/';
+var baseUrl = 'http://localhost:3000/api/';
+//let baseUrl = 'https://omnipompis.herokuapp.com/api/'
 var UserProvider = (function () {
     function UserProvider(http, platform, storage) {
         this.http = http;
