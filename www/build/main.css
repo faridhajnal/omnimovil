@@ -25198,3 +25198,7 @@ ion-navbar.toolbar {
     padding-top: calc(16px + 20px);
   }
 }
+
+.scroll-content {
+  padding: 0 !important;
+}

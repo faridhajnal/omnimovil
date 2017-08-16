@@ -31,10 +31,12 @@ export class HomePage implements OnInit{
 
   transactionFilter : string;
 
+    login: any;
+    
   constructor(public navCtrl: NavController, private menuCtrl : MenuController,
               private userService : UserProvider,
               private dataService : DataService, private modalCtrl : ModalController) {
-
+                this.login = LoginPage;
   }
 
   ionViewDidLoad(){

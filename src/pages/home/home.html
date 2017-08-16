@@ -1,12 +1,10 @@
-
 <ion-header>
 
   <ion-navbar color="primary">
     <ion-title text-center>OmniPruebas</ion-title>
 
     <ion-buttons end>
-      <button ion-button
-              icon-only (click)="logout()">
+      <button ion-button icon-only (click)="logout()">
         <ion-icon name="lock"></ion-icon>
       </button>
     </ion-buttons>
@@ -16,32 +14,24 @@
 
 </ion-header>
 
-
+<ion-searchbar [(ngModel)]="searchTerm" placeholder="Buscar..." showCancelButton="true" cancelButtonText="Cancelar" (ionInput)="getItems($event)"></ion-searchbar>
+<ion-segment [(ngModel)]="transactionFilter" (ngModelChange)="searchTerm = ''; onFilterChange(transactionFilter)">
+  <ion-segment-button value="all">
+    Todas
+  </ion-segment-button>
+  <ion-segment-button value="completed">
+    Completadas
+  </ion-segment-button>
+  <ion-segment-button value="pending">
+    Otras
+  </ion-segment-button>
+</ion-segment>
 <ion-content padding>
   <ion-refresher (ionRefresh)="recargar($event)">
-    <ion-refresher-content
-      pullingText="Jala para refrescar"
-      refreshingText="Obteniendo">
+    <ion-refresher-content pullingText="Jala para refrescar" refreshingText="Obteniendo">
 
     </ion-refresher-content>
   </ion-refresher>
-  <ion-searchbar [(ngModel)]="searchTerm" placeholder="Buscar..." showCancelButton="true" cancelButtonText="Cancelar" (ionInput)="getItems($event)"></ion-searchbar>
-  <div>
-    <ion-segment [(ngModel)]="transactionFilter" (ngModelChange)="searchTerm = ''; onFilterChange(transactionFilter)">
-      <ion-segment-button value="all">
-        Todas
-      </ion-segment-button>
-      <ion-segment-button value="completed">
-        Completadas
-      </ion-segment-button>
-      <ion-segment-button value="pending">
-        Otras
-      </ion-segment-button>
-    </ion-segment>
-  </div>
-
-
-
   <div [ngSwitch]="transactionFilter">
     <ion-list *ngSwitchCase="'all'">
       <ion-card [ngStyle]="{'background-color' : getColorFromStatus(t.statusLog)}" (click)="showTransactionDetail(t)" *ngFor="let t of filteredTransactions">
@@ -76,5 +66,9 @@
       </ion-card>
     </ion-list>
   </div>
-
 </ion-content>
+ <ion-tabs>
+      <ion-tab tabIcon="call"  [root]="login" ="3" tabBadgeStyle="danger"></ion-tab>
+      <ion-tab tabIcon="chatbubbles"  tabBadge="14" tabBadgeStyle="danger"></ion-tab>
+      <ion-tab tabIcon="musical-notes" ></ion-tab>
+  </ion-tabs>
